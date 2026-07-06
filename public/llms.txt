@@ -1,0 +1,13 @@
+# StadiumIQ
+
+> GenAI-enabled Smart Stadium & Tournament Operations assistant for the FIFA World Cup 2026.
+
+StadiumIQ delivers role-based views for fans, volunteers, organizers, and venue staff — with AI-generated wayfinding, crowd management, multilingual chat, and real-time decision support.
+
+## Pages
+
+- [Home](/): Role selector and overview
+- [Fan view](/fan): Wayfinding, transport, accessibility, multilingual AI chat
+- [Volunteer view](/volunteer): Assistance queue, guest support
+- [Organizer view](/organizer): Crowd dashboard, decision support, ops intelligence
+- [Staff view](/staff): Venue map, ops intelligence, decision support
