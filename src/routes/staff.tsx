@@ -5,8 +5,11 @@ import { OpsIntelligence } from "@/features/ops/ops-intelligence";
 import { DecisionSupport } from "@/features/decision/decision-support";
 import { TransportPanel } from "@/features/transport/transport-panel";
 import { StadiumMap } from "@/features/stadium/stadium-map";
+import { TicketScanner } from "@/features/tickets/ticket-scanner";
+import { EvacuationPlanner } from "@/features/evacuation/evacuation-planner";
 import { useLiveStadium } from "@/features/stadium/use-live-stadium";
 import { useSession } from "@/features/session/session-context";
+
 
 export const Route = createFileRoute("/staff")({
   head: () => ({
@@ -35,9 +38,11 @@ function StaffView() {
             </h2>
             <StadiumMap zones={zones} />
           </section>
+          <EvacuationPlanner zones={zones} />
           <OpsIntelligence incidents={incidents} zones={zones} />
         </div>
         <div className="space-y-6">
+          <TicketScanner />
           <DecisionSupport />
           <TransportPanel />
         </div>
@@ -45,3 +50,4 @@ function StaffView() {
     </AppShell>
   );
 }
+
