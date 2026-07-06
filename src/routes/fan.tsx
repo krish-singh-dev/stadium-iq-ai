@@ -44,6 +44,3 @@ function FanView() {
     </AppShell>
   );
 }
-
-// unused import guard for tree-shakers
-export const _guard = Navigate;
