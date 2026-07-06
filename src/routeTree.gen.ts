@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as VolunteerRouteImport } from './routes/volunteer'
 import { Route as StaffRouteImport } from './routes/staff'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as OrganizerRouteImport } from './routes/organizer'
 import { Route as FanRouteImport } from './routes/fan'
 import { Route as IndexRouteImport } from './routes/index'
@@ -23,6 +24,11 @@ const VolunteerRoute = VolunteerRouteImport.update({
 const StaffRoute = StaffRouteImport.update({
   id: '/staff',
   path: '/staff',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
 const OrganizerRoute = OrganizerRouteImport.update({
@@ -45,6 +51,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/fan': typeof FanRoute
   '/organizer': typeof OrganizerRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/staff': typeof StaffRoute
   '/volunteer': typeof VolunteerRoute
 }
@@ -52,6 +59,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/fan': typeof FanRoute
   '/organizer': typeof OrganizerRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/staff': typeof StaffRoute
   '/volunteer': typeof VolunteerRoute
 }
@@ -60,21 +68,36 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/fan': typeof FanRoute
   '/organizer': typeof OrganizerRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/staff': typeof StaffRoute
   '/volunteer': typeof VolunteerRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/fan' | '/organizer' | '/staff' | '/volunteer'
+  fullPaths:
+    | '/'
+    | '/fan'
+    | '/organizer'
+    | '/sitemap.xml'
+    | '/staff'
+    | '/volunteer'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/fan' | '/organizer' | '/staff' | '/volunteer'
-  id: '__root__' | '/' | '/fan' | '/organizer' | '/staff' | '/volunteer'
+  to: '/' | '/fan' | '/organizer' | '/sitemap.xml' | '/staff' | '/volunteer'
+  id:
+    | '__root__'
+    | '/'
+    | '/fan'
+    | '/organizer'
+    | '/sitemap.xml'
+    | '/staff'
+    | '/volunteer'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   FanRoute: typeof FanRoute
   OrganizerRoute: typeof OrganizerRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   StaffRoute: typeof StaffRoute
   VolunteerRoute: typeof VolunteerRoute
 }
@@ -93,6 +116,13 @@ declare module '@tanstack/react-router' {
       path: '/staff'
       fullPath: '/staff'
       preLoaderRoute: typeof StaffRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/organizer': {
@@ -123,6 +153,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   FanRoute: FanRoute,
   OrganizerRoute: OrganizerRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   StaffRoute: StaffRoute,
   VolunteerRoute: VolunteerRoute,
 }
