@@ -15,7 +15,7 @@ export function TicketScanner() {
     () =>
       signTicket({
         match: "USAMEX",
-        seat: "N108-R12-S07",
+        seat: "N108R12S07",
         expiresAt: Date.now() + 1000 * 60 * 60 * 6,
       }),
     [],
