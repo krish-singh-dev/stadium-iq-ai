@@ -75,3 +75,39 @@ Each action must start with a verb. Do not add prose before or after the list.`,
       };
     }
   });
+
+const BroadcastInput = z.object({
+  message: z.string().trim().min(3).max(300),
+  audience: z.enum(["all", "north", "south", "east", "west", "concourse"]),
+});
+
+/** Server function: multilingual PA-style announcement (EN/ES/FR/AR). */
+export const composeBroadcast = createServerFn({ method: "POST" })
+  .inputValidator((data: unknown) => BroadcastInput.parse(data))
+  .handler(async ({ data }) => {
+    const key = process.env.LOVABLE_API_KEY;
+    if (!key) throw new Error("Missing LOVABLE_API_KEY");
+    const gateway = createLovableAiGatewayProvider(key);
+    const model = gateway("google/gemini-3-flash-preview");
+    try {
+      const { text } = await generateText({
+        model,
+        messages: [
+          {
+            role: "system",
+            content: `You draft short public-address broadcasts for a FIFA World Cup 2026 stadium.
+Output exactly four labeled lines: "EN:", "ES:", "FR:", "AR:" — one calm, concise sentence per language, no emojis, no extra prose.
+Audience: ${data.audience}.`,
+          },
+          { role: "user", content: data.message },
+        ],
+      });
+      return { text };
+    } catch (err) {
+      return {
+        text: `EN: ${data.message}\nES: ${data.message}\nFR: ${data.message}\nAR: ${data.message}`,
+        error: err instanceof Error ? err.message : "unknown",
+      };
+    }
+  });
+
