@@ -30,9 +30,19 @@ const ROLES: readonly {
 }[] = [
   { role: "fan", to: "/fan", title: "Fan", blurb: "Wayfinding, transport, and a multilingual AI concierge.", glyph: "🎟️" },
   { role: "volunteer", to: "/volunteer", title: "Volunteer", blurb: "Assistance queue, accessibility flows, guest support.", glyph: "🤝" },
-  { role: "organizer", to: "/organizer", title: "Organizer", blurb: "Crowd dashboard, incident log, decision support.", glyph: "🎛️" },
-  { role: "staff", to: "/staff", title: "Venue Staff", blurb: "Shift summary, ops intelligence, real-time actions.", glyph: "🛠️" },
+  { role: "organizer", to: "/organizer", title: "Organizer", blurb: "Crowd dashboard, 15-min forecast, sustainability, AI broadcasts.", glyph: "🎛️" },
+  { role: "staff", to: "/staff", title: "Venue Staff", blurb: "Ticket scanner, evacuation planner, ops intelligence.", glyph: "🛠️" },
 ];
+
+const FEATURES = [
+  "Multilingual AI concierge (EN · ES · FR · AR)",
+  "Live crowd dashboard with 15-min forecast",
+  "Evacuation planner with accessibility filter",
+  "AI incident checklists & PA broadcasts",
+  "Ticket verification with checksum",
+  "Sustainability metrics (energy · water · CO₂)",
+];
+
 
 function Landing() {
   const { setRole } = useSession();
@@ -74,6 +84,19 @@ function Landing() {
             </li>
           ))}
         </ul>
+        <section aria-labelledby="features-heading" className="mt-12 rounded-2xl border bg-card/60 p-6 backdrop-blur">
+          <h2 id="features-heading" className="text-sm font-semibold uppercase tracking-widest text-primary">
+            What's inside
+          </h2>
+          <ul role="list" className="mt-3 grid gap-2 sm:grid-cols-2">
+            {FEATURES.map((f) => (
+              <li key={f} className="flex items-start gap-2 text-sm">
+                <span aria-hidden="true" className="mt-0.5 text-primary">✦</span>
+                <span>{f}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
         <p className="mt-10 text-center text-xs text-muted-foreground">
           Independent demo. Not affiliated with FIFA or any tournament sponsor.
         </p>
@@ -81,3 +104,4 @@ function Landing() {
     </div>
   );
 }
+
