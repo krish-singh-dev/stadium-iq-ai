@@ -67,7 +67,7 @@ export function Wayfinder({ zones }: Props) {
                 {zones.map((z) => (
                   <option key={z.id} value={z.id}>
                     {z.name}
-                    {z.accessible ? " ♿" : ""}
+                    {z.accessible ? " (accessible)" : ""}
                   </option>
                 ))}
               </select>

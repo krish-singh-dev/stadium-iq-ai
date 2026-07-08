@@ -11,7 +11,7 @@ const NAV: readonly { to: string; label: string; role: Role }[] = [
   { to: "/staff", label: "Staff", role: "staff" },
 ];
 
-export function AppShell({ children }: { children: ReactNode }) {
+export function AppShell({ children, title }: { children: ReactNode; title?: string }) {
   const { language, setLanguage } = useSession();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
@@ -86,6 +86,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         </nav>
       </header>
       <main id="main" className="mx-auto max-w-7xl px-4 py-6">
+        {title ? <h1 className="sr-only">{title}</h1> : null}
         <p className="mb-4 rounded-md border border-dashed bg-secondary/40 px-3 py-2 text-xs text-muted-foreground">
           Demo mode · all realtime data is simulated. Structured for websocket/API swap-in.
         </p>

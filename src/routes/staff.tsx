@@ -29,7 +29,7 @@ function StaffView() {
   }, [role, setRole]);
 
   return (
-    <AppShell>
+    <AppShell title="Staff operations — venue overview, ticket verification, and decision support">
       <div className="grid gap-6 lg:grid-cols-3">
         <div className="space-y-6 lg:col-span-2">
           <section aria-labelledby="map-heading" className="rounded-xl border bg-card p-4 shadow-sm">

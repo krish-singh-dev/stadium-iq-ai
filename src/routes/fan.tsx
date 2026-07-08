@@ -27,7 +27,7 @@ function FanView() {
   }, [role, setRole]);
 
   return (
-    <AppShell>
+    <AppShell title="Fan experience — navigation, transport, and multilingual assistant">
       <div className="grid gap-6 lg:grid-cols-3">
         <div className="space-y-6 lg:col-span-2">
           <Wayfinder zones={zones} />
