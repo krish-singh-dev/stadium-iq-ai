@@ -30,7 +30,7 @@ function OrganizerView() {
   }, [role, setRole]);
 
   return (
-    <AppShell>
+    <AppShell title="Organizer control center — crowd, forecast, broadcast, and decision support">
       <div className="grid gap-6 lg:grid-cols-3">
         <div className="space-y-6 lg:col-span-2">
           <CrowdDashboard zones={zones} />
