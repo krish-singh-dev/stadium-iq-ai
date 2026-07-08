@@ -80,6 +80,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
+      { name: "referrer", content: "strict-origin-when-cross-origin" },
+      { name: "color-scheme", content: "light dark" },
+      { httpEquiv: "X-Content-Type-Options", content: "nosniff" },
+      {
+        httpEquiv: "Content-Security-Policy",
+        content:
+          "default-src 'self'; img-src 'self' data: https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; script-src 'self' 'unsafe-inline'; connect-src 'self' https:; frame-ancestors 'none'; base-uri 'self'; form-action 'self'",
+      },
       { title: "StadiumIQ — Smart Stadium Assistant · FIFA World Cup 2026" },
       {
         name: "description",
