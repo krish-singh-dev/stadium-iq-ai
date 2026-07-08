@@ -15,7 +15,10 @@ export function useLiveStadium(): {
   const [incidents, setIncidents] = useState<readonly Incident[]>(INITIAL_INCIDENTS);
 
   useEffect(() => {
-    const id = setInterval(() => {
+    if (typeof document === "undefined") return;
+    let id: ReturnType<typeof setInterval> | undefined;
+
+    const tick = () => {
       setZones((current) =>
         current.map((z) => {
           const drift = Math.round((Math.random() - 0.45) * z.capacity * 0.04);
@@ -23,8 +26,28 @@ export function useLiveStadium(): {
           return next === z.occupancy ? z : { ...z, occupancy: next };
         }),
       );
-    }, 5000);
-    return () => clearInterval(id);
+    };
+
+    const start = () => {
+      if (id === undefined) id = setInterval(tick, 5000);
+    };
+    const stop = () => {
+      if (id !== undefined) {
+        clearInterval(id);
+        id = undefined;
+      }
+    };
+    const onVisibility = () => {
+      if (document.visibilityState === "visible") start();
+      else stop();
+    };
+
+    onVisibility();
+    document.addEventListener("visibilitychange", onVisibility);
+    return () => {
+      document.removeEventListener("visibilitychange", onVisibility);
+      stop();
+    };
   }, []);
 
   return {
