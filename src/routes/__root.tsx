@@ -136,6 +136,7 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <SessionProvider>
+        <HtmlLangSync />
         <Outlet />
         <Toaster richColors position="top-right" />
       </SessionProvider>

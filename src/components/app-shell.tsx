@@ -75,6 +75,7 @@ export function AppShell({ children }: { children: ReactNode }) {
             <Link
               key={n.to}
               to={n.to}
+              aria-current={pathname === n.to ? "page" : undefined}
               className={`min-h-11 shrink-0 rounded-md px-3 py-2 text-sm font-medium ${
                 pathname === n.to ? "bg-primary text-primary-foreground" : "hover:bg-accent"
               }`}
