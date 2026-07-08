@@ -57,7 +57,7 @@ function VolunteerView() {
   );
 
   return (
-    <AppShell>
+    <AppShell title="Volunteer console — assistance queue and on-shift tools">
       <div className="grid gap-6 lg:grid-cols-3">
         <div className="space-y-6 lg:col-span-2">
           <section
