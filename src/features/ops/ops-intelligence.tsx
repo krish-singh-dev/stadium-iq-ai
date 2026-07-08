@@ -70,7 +70,7 @@ export function OpsIntelligence({ incidents, zones }: Props) {
               <p className="text-xs text-muted-foreground">
                 {zoneById.get(i.zoneId)?.name ?? i.zoneId} ·{" "}
                 <span className="capitalize">{i.type.replace("_", " ")}</span> ·{" "}
-                {new Date(i.reportedAt).toLocaleTimeString()}
+                {formatTimeUTC(i.reportedAt)}
               </p>
             </div>
             <span
