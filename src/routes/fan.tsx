@@ -13,8 +13,12 @@ export const Route = createFileRoute("/fan")({
   head: () => ({
     meta: [
       { title: "Fan View — StadiumIQ" },
-      { name: "description", content: "Multilingual assistant, wayfinding, transport, and accessibility for stadium fans." },
+      { name: "description", content: "Multilingual AI concierge, wayfinding, transport, and accessibility tools for stadium fans at the FIFA World Cup 2026." },
+      { property: "og:title", content: "Fan View — StadiumIQ" },
+      { property: "og:description", content: "Multilingual assistant, wayfinding, transport, and accessibility for stadium fans." },
+      { property: "og:url", content: "https://stadium-iq-ai.lovable.app/fan" },
     ],
+    links: [{ rel: "canonical", href: "https://stadium-iq-ai.lovable.app/fan" }],
   }),
   component: FanView,
 });

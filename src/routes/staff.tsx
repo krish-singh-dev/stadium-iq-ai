@@ -15,8 +15,12 @@ export const Route = createFileRoute("/staff")({
   head: () => ({
     meta: [
       { title: "Staff View — StadiumIQ" },
-      { name: "description", content: "Shift summary, ops intelligence, and real-time actions for venue staff." },
+      { name: "description", content: "Venue overview, ticket verification, evacuation planning, and real-time ops intelligence for stadium staff." },
+      { property: "og:title", content: "Staff View — StadiumIQ" },
+      { property: "og:description", content: "Shift summary, ops intelligence, and real-time actions for venue staff." },
+      { property: "og:url", content: "https://stadium-iq-ai.lovable.app/staff" },
     ],
+    links: [{ rel: "canonical", href: "https://stadium-iq-ai.lovable.app/staff" }],
   }),
   component: StaffView,
 });

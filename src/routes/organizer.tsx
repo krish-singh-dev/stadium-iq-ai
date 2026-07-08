@@ -16,8 +16,12 @@ export const Route = createFileRoute("/organizer")({
   head: () => ({
     meta: [
       { title: "Organizer View — StadiumIQ" },
-      { name: "description", content: "Crowd management, incident log, and AI decision support for organizers." },
+      { name: "description", content: "Crowd dashboard, 15-minute forecast, evacuation planning, sustainability, and AI decision support for stadium organizers." },
+      { property: "og:title", content: "Organizer View — StadiumIQ" },
+      { property: "og:description", content: "Crowd management, incident log, and AI decision support for organizers." },
+      { property: "og:url", content: "https://stadium-iq-ai.lovable.app/organizer" },
     ],
+    links: [{ rel: "canonical", href: "https://stadium-iq-ai.lovable.app/organizer" }],
   }),
   component: OrganizerView,
 });

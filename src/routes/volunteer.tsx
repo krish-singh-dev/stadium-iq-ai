@@ -13,8 +13,12 @@ export const Route = createFileRoute("/volunteer")({
   head: () => ({
     meta: [
       { title: "Volunteer View — StadiumIQ" },
-      { name: "description", content: "Assistance queue and support tools for stadium volunteers." },
+      { name: "description", content: "Assistance queue, accessibility flows, and guest support tools for stadium volunteers at the FIFA World Cup 2026." },
+      { property: "og:title", content: "Volunteer View — StadiumIQ" },
+      { property: "og:description", content: "Assistance queue, accessibility flows, and guest support tools for stadium volunteers." },
+      { property: "og:url", content: "https://stadium-iq-ai.lovable.app/volunteer" },
     ],
+    links: [{ rel: "canonical", href: "https://stadium-iq-ai.lovable.app/volunteer" }],
   }),
   component: VolunteerView,
 });
