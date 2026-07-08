@@ -1,33 +1,65 @@
-import { useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
-import { signTicket, verifyTicket } from "@/lib/ticket";
+import { issueDemoTicket, verifyTicketFn } from "@/lib/ticket.functions";
 import { sanitizeUserText } from "@/lib/sanitize";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-/** Staff-only ticket scanner (demo checksum, not real crypto). */
+type Result = Awaited<ReturnType<typeof verifyTicketFn>>;
+
+/** Staff-only ticket scanner. Verification runs server-side (HMAC-SHA256). */
 export function TicketScanner() {
   const [code, setCode] = useState("");
-  const [result, setResult] = useState<ReturnType<typeof verifyTicket> | null>(null);
+  const [result, setResult] = useState<Result | null>(null);
+  const [demoCode, setDemoCode] = useState<string>("");
+  const [pending, setPending] = useState(false);
 
-  const demoCode = useMemo(
-    () =>
-      signTicket({
-        match: "USAMEX",
-        seat: "N108R12S07",
-        expiresAt: Date.now() + 1000 * 60 * 60 * 6,
-      }),
-    [],
-  );
+  useEffect(() => {
+    let cancelled = false;
+    issueDemoTicket({ data: { match: "USAMEX", seat: "N108R12S07" } })
+      .then((r) => {
+        if (!cancelled) setDemoCode(r.code);
+      })
+      .catch(() => {
+        /* demo optional */
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
-  function scan(raw: string) {
-    const clean = sanitizeUserText(raw, 120);
-    const r = verifyTicket(clean);
-    setResult(r);
-    if (r.ok) toast.success(`Admitted · Seat ${r.payload?.seat}`);
-    else toast.error(`Rejected · ${r.reason}`);
-  }
+  const scan = useCallback(async (raw: string) => {
+    const clean = sanitizeUserText(raw, 200);
+    if (!clean) {
+      toast.error("Enter a ticket code");
+      return;
+    }
+    setPending(true);
+    try {
+      const r = await verifyTicketFn({ data: { code: clean } });
+      setResult(r);
+      if (r.ok) toast.success(`Admitted · Seat ${r.payload?.seat}`);
+      else toast.error(`Rejected · ${r.reason}`);
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Verification failed");
+    } finally {
+      setPending(false);
+    }
+  }, []);
+
+  const useDemo = useCallback(() => {
+    if (!demoCode) return;
+    setCode(demoCode);
+    void scan(demoCode);
+  }, [demoCode, scan]);
+
+  const statusClass = useMemo(() => {
+    if (!result) return "";
+    return result.ok
+      ? "border-density-low bg-density-low/20"
+      : "border-destructive bg-destructive/10 text-destructive";
+  }, [result]);
 
   return (
     <section
@@ -39,13 +71,13 @@ export function TicketScanner() {
           Ticket Verification
         </h2>
         <p className="text-xs text-muted-foreground">
-          Simulated QR scanner — paste a ticket code or try the demo one.
+          Paste a ticket code or try the demo one. Verification runs on the server.
         </p>
       </header>
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          scan(code);
+          void scan(code);
         }}
         className="space-y-3"
       >
@@ -55,22 +87,21 @@ export function TicketScanner() {
             id="ticket-code"
             value={code}
             onChange={(e) => setCode(e.target.value)}
-            placeholder="WC26-…"
+            placeholder="WC26.…"
             autoComplete="off"
+            inputMode="text"
           />
         </div>
         <div className="flex flex-wrap gap-2">
-          <Button type="submit" className="min-h-11">
-            Verify ticket
+          <Button type="submit" className="min-h-11" disabled={pending}>
+            {pending ? "Verifying…" : "Verify ticket"}
           </Button>
           <Button
             type="button"
             variant="outline"
             className="min-h-11"
-            onClick={() => {
-              setCode(demoCode);
-              scan(demoCode);
-            }}
+            onClick={useDemo}
+            disabled={pending || !demoCode}
           >
             Use demo ticket
           </Button>
@@ -80,11 +111,7 @@ export function TicketScanner() {
         <div
           role="status"
           aria-live="polite"
-          className={`mt-4 rounded-md border p-3 text-sm ${
-            result.ok
-              ? "border-density-low bg-density-low/20"
-              : "border-destructive bg-destructive/10 text-destructive"
-          }`}
+          className={`mt-4 rounded-md border p-3 text-sm ${statusClass}`}
         >
           {result.ok ? (
             <>

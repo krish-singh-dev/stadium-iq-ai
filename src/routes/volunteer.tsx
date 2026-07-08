@@ -1,10 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { AppShell } from "@/components/app-shell";
 import { AccessibilityPanel } from "@/features/accessibility/accessibility-panel";
 import { AssistantChat } from "@/features/assistant/assistant-chat";
 import { useLiveStadium } from "@/features/stadium/use-live-stadium";
 import { useSession } from "@/features/session/session-context";
+import { formatTimeUTC } from "@/lib/format-time";
 import type { AssistanceRequest } from "@/types";
 import { ZONES } from "@/lib/mock-data";
 
@@ -24,36 +25,36 @@ const SEED: AssistanceRequest[] = [
   { id: "seed-2", zoneId: "gate-b", kind: "translation", note: "Arabic-speaking family looking for Gate B", createdAt: 1_700_000_220_000, status: "assigned" },
 ];
 
-function formatTimeUTC(ms: number): string {
-  const d = new Date(ms);
-  const h = String(d.getUTCHours()).padStart(2, "0");
-  const m = String(d.getUTCMinutes()).padStart(2, "0");
-  const s = String(d.getUTCSeconds()).padStart(2, "0");
-  return `${h}:${m}:${s}`;
-}
+const ZONE_NAME_BY_ID: ReadonlyMap<string, string> = new Map(
+  ZONES.map((z) => [z.id, z.name] as const),
+);
 
 function VolunteerView() {
   const { role, setRole } = useSession();
   const { zones } = useLiveStadium();
   const [queue, setQueue] = useState<AssistanceRequest[]>(SEED);
+
   useEffect(() => {
     if (role !== "volunteer") setRole("volunteer");
-  }, [role, setRole]);
+    // setRole from useState is stable; excluded from deps intentionally.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [role]);
 
-  const zoneById = new Map(ZONES.map((z) => [z.id, z.name] as const));
-
-  function advance(id: string) {
+  const advance = useCallback((id: string) => {
     setQueue((prev) =>
-      prev.map((r) =>
-        r.id !== id
-          ? r
-          : {
-              ...r,
-              status: r.status === "pending" ? "assigned" : r.status === "assigned" ? "completed" : "completed",
-            },
-      ),
+      prev.map((r) => {
+        if (r.id !== id) return r;
+        const next: AssistanceRequest["status"] =
+          r.status === "pending" ? "assigned" : "completed";
+        return { ...r, status: next };
+      }),
     );
-  }
+  }, []);
+
+  const onAssistanceRequest = useCallback(
+    (r: AssistanceRequest) => setQueue((prev) => [r, ...prev]),
+    [],
+  );
 
   return (
     <AppShell>
@@ -76,7 +77,7 @@ function VolunteerView() {
                 <li key={r.id} className="flex flex-wrap items-center justify-between gap-3 py-3">
                   <div className="min-w-0">
                     <p className="font-medium capitalize">
-                      {r.kind} · {zoneById.get(r.zoneId) ?? r.zoneId}
+                      {r.kind} · {ZONE_NAME_BY_ID.get(r.zoneId) ?? r.zoneId}
                     </p>
                     <p className="text-xs text-muted-foreground">
                       {r.note || "No additional details"} ·{" "}
@@ -99,6 +100,11 @@ function VolunteerView() {
                       <button
                         type="button"
                         onClick={() => advance(r.id)}
+                        aria-label={
+                          r.status === "pending"
+                            ? `Assign ${r.kind} request in ${ZONE_NAME_BY_ID.get(r.zoneId) ?? r.zoneId} to me`
+                            : `Mark ${r.kind} request in ${ZONE_NAME_BY_ID.get(r.zoneId) ?? r.zoneId} complete`
+                        }
                         className="min-h-11 rounded-md border px-3 py-1 text-sm hover:bg-accent"
                       >
                         {r.status === "pending" ? "Assign to me" : "Mark complete"}
@@ -109,10 +115,7 @@ function VolunteerView() {
               ))}
             </ul>
           </section>
-          <AccessibilityPanel
-            zones={zones}
-            onRequest={(r) => setQueue((prev) => [r, ...prev])}
-          />
+          <AccessibilityPanel zones={zones} onRequest={onAssistanceRequest} />
         </div>
         <div className="lg:sticky lg:top-24 lg:h-fit">
           <AssistantChat zones={zones} />

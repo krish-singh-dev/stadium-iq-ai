@@ -1,7 +1,9 @@
 import { createServerFn } from "@tanstack/react-start";
+import { getRequestIP } from "@tanstack/react-start/server";
 import { generateText } from "ai";
 import { z } from "zod";
 import { createLovableAiGatewayProvider } from "./ai-gateway.server";
+import { checkRateLimit } from "./rate-limit.server";
 
 const ChatInput = z.object({
   message: z.string().trim().min(1).max(500),
@@ -10,10 +12,27 @@ const ChatInput = z.object({
   context: z.string().max(2000).optional(),
 });
 
+function ipKey(prefix: string): string {
+  try {
+    const ip = getRequestIP({ xForwardedFor: true }) ?? "unknown";
+    return `${prefix}:${ip}`;
+  } catch {
+    return `${prefix}:unknown`;
+  }
+}
+
+function rateLimitOrThrow(key: string, limit: number, windowMs: number) {
+  const r = checkRateLimit(key, limit, windowMs);
+  if (!r.allowed) {
+    throw new Error(`Rate limit exceeded. Retry in ${Math.ceil(r.retryAfterMs / 1000)}s`);
+  }
+}
+
 /** Server function: multilingual stadium assistant. */
 export const askAssistant = createServerFn({ method: "POST" })
   .inputValidator((data: unknown) => ChatInput.parse(data))
   .handler(async ({ data }) => {
+    rateLimitOrThrow(ipKey("ai-chat"), 20, 60_000);
     const key = process.env.LOVABLE_API_KEY;
     if (!key) throw new Error("Missing LOVABLE_API_KEY");
     const gateway = createLovableAiGatewayProvider(key);
@@ -49,6 +68,7 @@ const RecommendInput = z.object({
 export const recommendActions = createServerFn({ method: "POST" })
   .inputValidator((data: unknown) => RecommendInput.parse(data))
   .handler(async ({ data }) => {
+    rateLimitOrThrow(ipKey("ai-recommend"), 10, 60_000);
     const key = process.env.LOVABLE_API_KEY;
     if (!key) throw new Error("Missing LOVABLE_API_KEY");
     const gateway = createLovableAiGatewayProvider(key);
@@ -85,6 +105,7 @@ const BroadcastInput = z.object({
 export const composeBroadcast = createServerFn({ method: "POST" })
   .inputValidator((data: unknown) => BroadcastInput.parse(data))
   .handler(async ({ data }) => {
+    rateLimitOrThrow(ipKey("ai-broadcast"), 10, 60_000);
     const key = process.env.LOVABLE_API_KEY;
     if (!key) throw new Error("Missing LOVABLE_API_KEY");
     const gateway = createLovableAiGatewayProvider(key);
@@ -110,4 +131,3 @@ Audience: ${data.audience}.`,
       };
     }
   });
-

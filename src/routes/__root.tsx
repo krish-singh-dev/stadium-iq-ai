@@ -12,6 +12,7 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { SessionProvider } from "../features/session/session-context";
+import { HtmlLangSync } from "../features/session/html-lang-sync";
 import { Toaster } from "../components/ui/sonner";
 
 function NotFoundComponent() {
@@ -83,18 +84,17 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         name: "description",
         content:
-          "GenAI-enabled smart stadium and tournament operations assistant for the FIFA World Cup 2026.",
+          "GenAI-powered smart stadium and tournament operations assistant for the FIFA World Cup 2026 — navigation, crowd, accessibility, transport, multilingual chat.",
       },
       { property: "og:title", content: "StadiumIQ — Smart Stadium Assistant · FIFA World Cup 2026" },
       {
         property: "og:description",
-        content: "Navigation, crowd management, accessibility, transport, and multilingual AI.",
+        content:
+          "GenAI-powered smart stadium and tournament operations assistant for the FIFA World Cup 2026 — navigation, crowd, accessibility, transport, multilingual chat.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "StadiumIQ — Smart Stadium Assistant · FIFA World Cup 2026" },
-      { name: "description", content: "GenAI-powered smart stadium and tournament operations assistant for the FIFA World Cup 2026 — navigation, crowd, accessibility, transport, multilingual chat." },
-      { property: "og:description", content: "GenAI-powered smart stadium and tournament operations assistant for the FIFA World Cup 2026 — navigation, crowd, accessibility, transport, multilingual chat." },
       { name: "twitter:description", content: "GenAI-powered smart stadium and tournament operations assistant for the FIFA World Cup 2026 — navigation, crowd, accessibility, transport, multilingual chat." },
       { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/002a624c-37ef-4111-83d4-bb088a88a532" },
       { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/002a624c-37ef-4111-83d4-bb088a88a532" },
