@@ -80,7 +80,7 @@ function VolunteerView() {
                     </p>
                     <p className="text-xs text-muted-foreground">
                       {r.note || "No additional details"} ·{" "}
-                      {new Date(r.createdAt).toLocaleTimeString()}
+                      {formatTimeUTC(r.createdAt)}
                     </p>
                   </div>
                   <div className="flex items-center gap-2">
