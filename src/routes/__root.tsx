@@ -88,22 +88,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         content:
           "default-src 'self'; img-src 'self' data: https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; script-src 'self' 'unsafe-inline'; connect-src 'self' https:; frame-ancestors 'none'; base-uri 'self'; form-action 'self'",
       },
-      { title: "StadiumIQ — Smart Stadium Assistant · FIFA World Cup 2026" },
-      {
-        name: "description",
-        content:
-          "GenAI-powered smart stadium and tournament operations assistant for the FIFA World Cup 2026 — navigation, crowd, accessibility, transport, multilingual chat.",
-      },
-      { property: "og:title", content: "StadiumIQ — Smart Stadium Assistant · FIFA World Cup 2026" },
-      {
-        property: "og:description",
-        content:
-          "GenAI-powered smart stadium and tournament operations assistant for the FIFA World Cup 2026 — navigation, crowd, accessibility, transport, multilingual chat.",
-      },
+      { name: "application-name", content: "StadiumIQ" },
+      { property: "og:site_name", content: "StadiumIQ" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "StadiumIQ — Smart Stadium Assistant · FIFA World Cup 2026" },
-      { name: "twitter:description", content: "GenAI-powered smart stadium and tournament operations assistant for the FIFA World Cup 2026 — navigation, crowd, accessibility, transport, multilingual chat." },
       { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/002a624c-37ef-4111-83d4-bb088a88a532" },
       { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/002a624c-37ef-4111-83d4-bb088a88a532" },
     ],
