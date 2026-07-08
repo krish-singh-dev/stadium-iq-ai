@@ -1,11 +1,17 @@
 import { describe, expect, it, vi } from "vitest";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { SessionProvider } from "@/features/session/session-context";
 
 vi.mock("@/lib/ai.functions", () => ({
   recommendActions: vi.fn(async () => ({ text: "1. Alert supervisor\n2. Secure area" })),
 }));
 
 import { DecisionSupport } from "@/features/decision/decision-support";
+
+function renderWithSession(ui: React.ReactElement) {
+  return render(<SessionProvider>{ui}</SessionProvider>);
+}
+
 
 describe("DecisionSupport", () => {
   it("renders labeled scenario input and disables submit until filled", () => {
