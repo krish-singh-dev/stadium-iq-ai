@@ -57,7 +57,7 @@ function Landing() {
             FIFA World Cup 2026 · Smart Stadium Operations
           </p>
           <h1 className="mt-3 text-4xl font-bold tracking-tight sm:text-5xl">
-            StadiumIQ
+            StadiumIQ — Smart Stadium Operations for 2026
           </h1>
           <p className="mx-auto mt-3 max-w-2xl text-base text-muted-foreground">
             A GenAI-enabled operations assistant for fans, volunteers, organizers, and venue
