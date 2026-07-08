@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { applyIncidentFilter, parseIncidentQuery } from "@/lib/query-incidents";
 import { sanitizeUserText } from "@/lib/sanitize";
+import { formatTimeUTC } from "@/lib/format-time";
 import type { Incident, Zone } from "@/types";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
