@@ -15,14 +15,14 @@ function renderWithSession(ui: React.ReactElement) {
 
 describe("DecisionSupport", () => {
   it("renders labeled scenario input and disables submit until filled", () => {
-    render(<DecisionSupport />);
+    renderWithSession(<DecisionSupport />);
     expect(screen.getByLabelText(/describe the scenario/i)).toBeInTheDocument();
     const submit = screen.getByRole("button", { name: /get recommendation/i });
     expect(submit).toBeDisabled();
   });
 
   it("shows the AI recommendation after submitting a scenario", async () => {
-    render(<DecisionSupport />);
+    renderWithSession(<DecisionSupport />);
     fireEvent.change(screen.getByLabelText(/describe the scenario/i), {
       target: { value: "Power outage in West Stand" },
     });
