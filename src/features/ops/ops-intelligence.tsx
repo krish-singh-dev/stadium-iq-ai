@@ -132,6 +132,6 @@ function formatFilter(
   if (f.zoneId) parts.push(`zone=${zoneById.get(f.zoneId)?.name ?? f.zoneId}`);
   if (f.severity) parts.push(`severity=${f.severity}`);
   if (f.status) parts.push(`status=${f.status}`);
-  if (f.since) parts.push(`since=${new Date(f.since).toLocaleTimeString()}`);
+  if (f.since) parts.push(`since=${formatTimeUTC(f.since)}`);
   return parts.join(", ");
 }
