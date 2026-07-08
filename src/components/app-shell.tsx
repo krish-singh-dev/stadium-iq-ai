@@ -11,7 +11,7 @@ const NAV: readonly { to: string; label: string; role: Role }[] = [
   { to: "/staff", label: "Staff", role: "staff" },
 ];
 
-export function AppShell({ children }: { children: ReactNode }) {
+export function AppShell({ children, title }: { children: ReactNode; title?: string }) {
   const { language, setLanguage } = useSession();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
