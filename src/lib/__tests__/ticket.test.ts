@@ -1,26 +1,33 @@
-import { describe, expect, it } from "vitest";
-import { signTicket, verifyTicket } from "@/lib/ticket";
+import { describe, expect, it, beforeAll } from "vitest";
 
-describe("ticket verifier", () => {
-  const future = Date.now() + 60_000;
-  const past = Date.now() - 60_000;
+// Provide a deterministic secret for tests before the module reads it.
+beforeAll(() => {
+  process.env.TICKET_SIGNING_SECRET = "test-secret-do-not-use-in-production-0123456789";
+});
 
-  it("round-trips a valid ticket", () => {
+describe("ticket verifier (HMAC)", () => {
+  it("round-trips a valid ticket", async () => {
+    const { signTicket, verifyTicket } = await import("@/lib/ticket.server");
+    const future = Date.now() + 60_000;
     const code = signTicket({ match: "USAMEX", seat: "N108R12S7", expiresAt: future });
     const res = verifyTicket(code);
     expect(res.ok).toBe(true);
     expect(res.payload?.match).toBe("USAMEX");
   });
-  it("rejects a malformed ticket", () => {
+  it("rejects a malformed ticket", async () => {
+    const { verifyTicket } = await import("@/lib/ticket.server");
     expect(verifyTicket("hello").ok).toBe(false);
     expect(verifyTicket("hello").reason).toBe("format");
   });
-  it("rejects a tampered ticket", () => {
-    const code = signTicket({ match: "USAMEX", seat: "N108", expiresAt: future });
+  it("rejects a tampered ticket", async () => {
+    const { signTicket, verifyTicket } = await import("@/lib/ticket.server");
+    const code = signTicket({ match: "USAMEX", seat: "N108", expiresAt: Date.now() + 60_000 });
     const tampered = code.replace("N108", "S001");
-    expect(verifyTicket(tampered).reason).toBe("checksum");
+    expect(verifyTicket(tampered).reason).toBe("signature");
   });
-  it("rejects an expired ticket", () => {
+  it("rejects an expired ticket", async () => {
+    const { signTicket, verifyTicket } = await import("@/lib/ticket.server");
+    const past = Date.now() - 60_000;
     const code = signTicket({ match: "USAMEX", seat: "N108", expiresAt: past });
     const res = verifyTicket(code);
     expect(res.ok).toBe(false);
