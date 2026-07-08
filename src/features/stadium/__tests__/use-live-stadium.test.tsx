@@ -20,11 +20,11 @@ describe("useLiveStadium", () => {
       result.current.reportIncident({
         id: "test-1",
         zoneId: "sec-north",
-        kind: "medical",
+        type: "medical",
         severity: "low",
-        createdAt: 1,
+        summary: "test",
+        reportedAt: 1,
         status: "open",
-        note: "test",
       });
     });
     expect(result.current.incidents.length).toBe(before + 1);
