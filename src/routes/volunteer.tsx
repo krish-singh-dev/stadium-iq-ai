@@ -18,10 +18,19 @@ export const Route = createFileRoute("/volunteer")({
   component: VolunteerView,
 });
 
+// Fixed timestamps so SSR and client hydration match.
 const SEED: AssistanceRequest[] = [
-  { id: "seed-1", zoneId: "sec-north", kind: "wheelchair", note: "Needs escort to section 108", createdAt: Date.now() - 400_000, status: "pending" },
-  { id: "seed-2", zoneId: "gate-b", kind: "translation", note: "Arabic-speaking family looking for Gate B", createdAt: Date.now() - 180_000, status: "assigned" },
+  { id: "seed-1", zoneId: "sec-north", kind: "wheelchair", note: "Needs escort to section 108", createdAt: 1_700_000_000_000, status: "pending" },
+  { id: "seed-2", zoneId: "gate-b", kind: "translation", note: "Arabic-speaking family looking for Gate B", createdAt: 1_700_000_220_000, status: "assigned" },
 ];
+
+function formatTimeUTC(ms: number): string {
+  const d = new Date(ms);
+  const h = String(d.getUTCHours()).padStart(2, "0");
+  const m = String(d.getUTCMinutes()).padStart(2, "0");
+  const s = String(d.getUTCSeconds()).padStart(2, "0");
+  return `${h}:${m}:${s}`;
+}
 
 function VolunteerView() {
   const { role, setRole } = useSession();
