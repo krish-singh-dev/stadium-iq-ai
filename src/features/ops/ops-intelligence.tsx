@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { applyIncidentFilter, parseIncidentQuery } from "@/lib/query-incidents";
 import { sanitizeUserText } from "@/lib/sanitize";
+import { formatTimeUTC } from "@/lib/format-time";
 import type { Incident, Zone } from "@/types";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -70,7 +71,7 @@ export function OpsIntelligence({ incidents, zones }: Props) {
               <p className="text-xs text-muted-foreground">
                 {zoneById.get(i.zoneId)?.name ?? i.zoneId} ·{" "}
                 <span className="capitalize">{i.type.replace("_", " ")}</span> ·{" "}
-                {new Date(i.reportedAt).toLocaleTimeString()}
+                {formatTimeUTC(i.reportedAt)}
               </p>
             </div>
             <span
@@ -131,6 +132,6 @@ function formatFilter(
   if (f.zoneId) parts.push(`zone=${zoneById.get(f.zoneId)?.name ?? f.zoneId}`);
   if (f.severity) parts.push(`severity=${f.severity}`);
   if (f.status) parts.push(`status=${f.status}`);
-  if (f.since) parts.push(`since=${new Date(f.since).toLocaleTimeString()}`);
+  if (f.since) parts.push(`since=${formatTimeUTC(f.since)}`);
   return parts.join(", ");
 }
