@@ -11,12 +11,15 @@ export const Route = createFileRoute("/")({
         content:
           "GenAI-powered smart stadium and tournament operations assistant for the FIFA World Cup 2026 — navigation, crowd, accessibility, transport, multilingual chat.",
       },
-      { property: "og:title", content: "StadiumIQ — FIFA World Cup 2026" },
+      { property: "og:title", content: "StadiumIQ — Smart Stadium Assistant · FIFA World Cup 2026" },
       {
         property: "og:description",
-        content: "Fan, volunteer, organizer, and staff views for smart stadium operations.",
+        content:
+          "GenAI-powered smart stadium and tournament operations assistant for the FIFA World Cup 2026 — navigation, crowd, accessibility, transport, multilingual chat.",
       },
+      { property: "og:url", content: "https://stadium-iq-ai.lovable.app/" },
     ],
+    links: [{ rel: "canonical", href: "https://stadium-iq-ai.lovable.app/" }],
   }),
   component: Landing,
 });
@@ -54,7 +57,7 @@ function Landing() {
             FIFA World Cup 2026 · Smart Stadium Operations
           </p>
           <h1 className="mt-3 text-4xl font-bold tracking-tight sm:text-5xl">
-            StadiumIQ
+            StadiumIQ — Smart Stadium Operations for 2026
           </h1>
           <p className="mx-auto mt-3 max-w-2xl text-base text-muted-foreground">
             A GenAI-enabled operations assistant for fans, volunteers, organizers, and venue
