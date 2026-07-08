@@ -25,9 +25,11 @@ describe("StadiumMap", () => {
   it("marks each zone with an accessible button label describing density", () => {
     render(<StadiumMap zones={ZONES} />);
     for (const z of ZONES) {
-      expect(
-        screen.getByRole("button", { name: new RegExp(z.name, "i") }),
-      ).toBeInTheDocument();
+      // Zone names may substring-match (e.g. "Fan Zone" vs "Fan Zone Grill"),
+      // so anchor the accessible-name regex to the full ", density " suffix.
+      const re = new RegExp(`^${z.name.replace(/[.*+?^${}()|[\\]\\\\]/g, "\\$&")}, density `, "i");
+      expect(screen.getByRole("button", { name: re })).toBeInTheDocument();
     }
   });
 });
+
