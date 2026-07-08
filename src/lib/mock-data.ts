@@ -18,11 +18,13 @@ export const ZONES: readonly Zone[] = [
   { id: "fanzone", name: "Fan Zone", type: "fanzone", capacity: 3000, occupancy: 2200, x: 80, y: 20, accessible: true },
 ];
 
+// Fixed epoch timestamps so SSR HTML matches client hydration.
+const SEED_EPOCH = 1_700_000_000_000;
 export const INITIAL_INCIDENTS: readonly Incident[] = [
-  { id: "inc-1", zoneId: "gate-c", type: "security", severity: "medium", summary: "Bag check backlog at Gate C", reportedAt: Date.now() - 1000 * 60 * 12, status: "in_progress" },
-  { id: "inc-2", zoneId: "rest-2", type: "maintenance", severity: "low", summary: "Sink leaking in South restrooms", reportedAt: Date.now() - 1000 * 60 * 45, status: "open" },
-  { id: "inc-3", zoneId: "med-1", type: "medical", severity: "high", summary: "Heat exhaustion patient stable", reportedAt: Date.now() - 1000 * 60 * 5, status: "in_progress" },
-  { id: "inc-4", zoneId: "sec-north", type: "lost_person", severity: "medium", summary: "Lost child reunited with family", reportedAt: Date.now() - 1000 * 60 * 90, status: "resolved" },
+  { id: "inc-1", zoneId: "gate-c", type: "security", severity: "medium", summary: "Bag check backlog at Gate C", reportedAt: SEED_EPOCH - 1000 * 60 * 12, status: "in_progress" },
+  { id: "inc-2", zoneId: "rest-2", type: "maintenance", severity: "low", summary: "Sink leaking in South restrooms", reportedAt: SEED_EPOCH - 1000 * 60 * 45, status: "open" },
+  { id: "inc-3", zoneId: "med-1", type: "medical", severity: "high", summary: "Heat exhaustion patient stable", reportedAt: SEED_EPOCH - 1000 * 60 * 5, status: "in_progress" },
+  { id: "inc-4", zoneId: "sec-north", type: "lost_person", severity: "medium", summary: "Lost child reunited with family", reportedAt: SEED_EPOCH - 1000 * 60 * 90, status: "resolved" },
 ];
 
 export const SHUTTLES: readonly ShuttleStatus[] = [
