@@ -86,6 +86,7 @@ export function AppShell({ children, title }: { children: ReactNode; title?: str
         </nav>
       </header>
       <main id="main" className="mx-auto max-w-7xl px-4 py-6">
+        {title ? <h1 className="sr-only">{title}</h1> : null}
         <p className="mb-4 rounded-md border border-dashed bg-secondary/40 px-3 py-2 text-xs text-muted-foreground">
           Demo mode · all realtime data is simulated. Structured for websocket/API swap-in.
         </p>
